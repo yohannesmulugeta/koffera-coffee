@@ -3,10 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - docs/DEPLOYMENT_STATUS.md
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -60,3 +62,55 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify live homepage and assets
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in {1..12}; do
+            if curl --fail --silent --show-error --location "$PAGE_URL" --output /tmp/live.html; then
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "The deployed homepage did not become available in time."
+              exit 1
+            fi
+            sleep 10
+          done
+
+          grep -q '/koffera-coffee/assets/' /tmp/live.html
+          if grep -q '/src/main.jsx' /tmp/live.html; then
+            echo "Raw Vite source was found in the deployed HTML."
+            exit 1
+          fi
+
+          curl --fail --silent --show-error --location "${PAGE_URL}favicon.svg" --output /tmp/favicon.svg
+          grep -q '<svg' /tmp/favicon.svg
+
+      - name: Checkout deployment branch state
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Record successful deployment verification
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          mkdir -p docs
+          {
+            echo '# Deployment Status'
+            echo
+            echo '- Result: PASS'
+            echo "- Source commit: $GITHUB_SHA"
+            echo "- Live URL: $PAGE_URL"
+            echo "- Verified at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            echo '- Checks: live homepage, compiled asset paths, no raw /src/main.jsx reference, favicon availability'
+          } > docs/DEPLOYMENT_STATUS.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/DEPLOYMENT_STATUS.md
+          git diff --cached --quiet || git commit -m "Record verified GitHub Pages deployment"
+          git push
