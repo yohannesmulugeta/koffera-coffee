@@ -53,13 +53,13 @@ test('mobile navigation opens and reaches the catalogue', async ({ page, isMobil
 
 test('request form reports demo status instead of fake success', async ({ page }) => {
   await page.goto('#/request-offer');
-  await page.getByLabel('Full name').fill('Demo Buyer');
-  await page.getByLabel('Company').fill('Demo Coffee Company');
-  await page.getByLabel('Business email').fill('buyer@example.com');
-  await page.getByLabel('Country').fill('Ethiopia');
-  await page.getByLabel('Buyer type').selectOption({ label: 'Specialty roaster' });
-  await page.getByLabel('Estimated quantity').fill('100 bags');
-  await page.getByLabel('Message').fill('Demo coffee request');
+  await page.getByLabel('Full name', { exact: true }).fill('Demo Buyer');
+  await page.getByRole('textbox', { name: 'Company', exact: true }).fill('Demo Coffee Company');
+  await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
+  await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
+  await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
+  await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
+  await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
   await page.getByLabel(/I agree/).check();
   await page.getByRole('button', { name: /Submit request/ }).click();
   await expect(page.getByRole('status')).toContainText('not connected');
