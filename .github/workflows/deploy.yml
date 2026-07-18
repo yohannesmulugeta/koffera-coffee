@@ -38,6 +38,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
@@ -61,9 +67,13 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v4
 
       - name: Verify live homepage and assets
+        id: verify
+        if: steps.deployment.outcome == 'success'
+        continue-on-error: true
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         shell: bash
@@ -90,27 +100,49 @@ jobs:
           grep -q '<svg' /tmp/favicon.svg
 
       - name: Checkout deployment branch state
+        if: always()
         uses: actions/checkout@v5
         with:
           ref: main
 
-      - name: Record successful deployment verification
+      - name: Record deployment outcome
+        if: always()
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
         run: |
+          if [ "$DEPLOY_OUTCOME" = "success" ] && [ "$VERIFY_OUTCOME" = "success" ]; then
+            RESULT=PASS
+          else
+            RESULT=FAIL
+          fi
+
           mkdir -p docs
           {
             echo '# Deployment Status'
             echo
-            echo '- Result: PASS'
+            echo "- Result: $RESULT"
             echo "- Source commit: $GITHUB_SHA"
-            echo "- Live URL: $PAGE_URL"
-            echo "- Verified at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-            echo '- Checks: live homepage, compiled asset paths, no raw /src/main.jsx reference, favicon availability'
+            echo "- Live URL: ${PAGE_URL:-Unavailable}"
+            echo "- Deploy action: $DEPLOY_OUTCOME"
+            echo "- Live verification: $VERIFY_OUTCOME"
+            echo "- Recorded at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            echo '- Verification checks: live homepage, compiled asset paths, no raw /src/main.jsx reference, favicon availability'
           } > docs/DEPLOYMENT_STATUS.md
 
+          git pull --rebase origin main
+          git add docs/DEPLOYMENT_STATUS.md
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/DEPLOYMENT_STATUS.md
-          git diff --cached --quiet || git commit -m "Record verified GitHub Pages deployment"
+          git diff --cached --quiet || git commit -m "Record GitHub Pages deployment outcome"
           git push
+
+      - name: Fail when deployment verification did not pass
+        if: always()
+        env:
+          DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+        run: |
+          test "$DEPLOY_OUTCOME" = "success"
+          test "$VERIFY_OUTCOME" = "success"
