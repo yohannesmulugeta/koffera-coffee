@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { company } from '../../data/company';
 
@@ -15,16 +15,16 @@ const serviceLinks = [
   ['FAQ', '/faq', 'Common buyer questions'],
 ];
 
-function Brand() {
+function Brand({ onNavigate }) {
   return (
-    <Link className="brand" to="/" aria-label="Koffera Coffee home">
+    <Link className="brand" to="/" aria-label="Koffera Coffee home" onClick={onNavigate}>
       <strong>K<span className="brand__bean">O</span>FFERA</strong>
       <small>COFFEE EXPORT</small>
     </Link>
   );
 }
 
-function Dropdown({ label, links, active }) {
+function Dropdown({ label, links, active, onNavigate }) {
   return (
     <div className="nav-dropdown">
       <button className={active ? 'is-current' : ''} type="button" aria-haspopup="true">
@@ -32,7 +32,7 @@ function Dropdown({ label, links, active }) {
       </button>
       <div className="nav-dropdown__panel">
         {links.map(([title, to, text]) => (
-          <Link key={to} to={to}>
+          <Link key={to} to={to} onClick={onNavigate}>
             <strong>{title}</strong>
             <small>{text}</small>
           </Link>
@@ -45,8 +45,7 @@ function Dropdown({ label, links, active }) {
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
-
-  useEffect(() => setOpen(false), [pathname]);
+  const closeNavigation = () => setOpen(false);
 
   const coffeeActive = ['/coffees', '/origins', '/quality-traceability'].some((path) => pathname.startsWith(path));
   const servicesActive = ['/export-services', '/markets', '/resources', '/faq'].some((path) => pathname.startsWith(path));
@@ -62,7 +61,7 @@ export default function Header() {
       </div>
       <header className="site-header">
         <div className="container site-header__inner">
-          <Brand />
+          <Brand onNavigate={closeNavigation} />
           <button
             className="mobile-menu-button"
             type="button"
@@ -74,12 +73,12 @@ export default function Header() {
             {open ? '×' : '☰'}
           </button>
           <nav id="primary-navigation" className={`primary-nav ${open ? 'is-open' : ''}`} aria-label="Primary navigation">
-            <NavLink to="/">Home</NavLink>
-            <Dropdown label="Coffee" links={coffeeLinks} active={coffeeActive} />
-            <Dropdown label="Services" links={serviceLinks} active={servicesActive} />
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/contact">Contact</NavLink>
-            <Link className="button button--small" to="/request-offer">Request an offer →</Link>
+            <NavLink to="/" onClick={closeNavigation}>Home</NavLink>
+            <Dropdown label="Coffee" links={coffeeLinks} active={coffeeActive} onNavigate={closeNavigation} />
+            <Dropdown label="Services" links={serviceLinks} active={servicesActive} onNavigate={closeNavigation} />
+            <NavLink to="/about" onClick={closeNavigation}>About</NavLink>
+            <NavLink to="/contact" onClick={closeNavigation}>Contact</NavLink>
+            <Link className="button button--small" to="/request-offer" onClick={closeNavigation}>Request an offer →</Link>
           </nav>
         </div>
       </header>
