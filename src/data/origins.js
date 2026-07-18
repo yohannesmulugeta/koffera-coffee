@@ -1,0 +1,42 @@
+export const origins = [
+  {
+    slug: 'yirgacheffe',
+    name: 'Yirgacheffe',
+    tone: 'gold',
+    summary: 'Internationally known for refined floral, citrus and tea-like profiles.',
+    detail:
+      'The final page should identify Koffera’s confirmed districts, suppliers or washing stations, processing options and current lots from the wider Gedeo area.',
+  },
+  {
+    slug: 'guji',
+    name: 'Guji',
+    tone: 'berry',
+    summary: 'Associated with expressive washed and natural specialty coffees.',
+    detail:
+      'Publish real supplier relationships, altitude ranges, lot references and processing photographs only after company verification.',
+  },
+  {
+    slug: 'sidama',
+    name: 'Sidama',
+    tone: 'olive',
+    summary: 'A diverse coffee-producing area with a wide range of elevations and profiles.',
+    detail:
+      'Connect the regional story to real coffee lots, processing partners and verified availability.',
+  },
+  {
+    slug: 'limu',
+    name: 'Limu',
+    tone: 'mocha',
+    summary: 'Often presented as a clean, balanced washed-coffee origin.',
+    detail:
+      'Confirm whether Koffera actively offers Limu coffee before publishing commercial claims or product links.',
+  },
+  {
+    slug: 'jimma',
+    name: 'Jimma',
+    tone: 'espresso',
+    summary: 'Relevant to both commercial and specialty coffee discussions.',
+    detail:
+      'Add verified grade, process, supplier, availability and quality information for any active Koffera offer.',
+  },
+];
