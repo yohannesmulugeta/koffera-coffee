@@ -47,7 +47,7 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Route and browser smoke tests
+      - name: Route, console, asset and responsive tests
         run: npm run test:e2e
 
       - name: Setup Pages
@@ -70,8 +70,8 @@ jobs:
         continue-on-error: true
         uses: actions/deploy-pages@v4
 
-      - name: Verify live homepage and assets
-        id: verify
+      - name: Verify live homepage and static assets
+        id: html_verify
         if: steps.deployment.outcome == 'success'
         continue-on-error: true
         env:
@@ -105,14 +105,45 @@ jobs:
         with:
           ref: main
 
+      - name: Setup Node for live route verification
+        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install live verification dependencies
+        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
+        run: npm ci --no-audit --no-fund
+
+      - name: Restore Playwright browser cache
+        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Ensure Chromium is available
+        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
+        run: npx playwright install --with-deps chromium
+
+      - name: Open every route on the deployed website
+        id: live_routes
+        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: node scripts/verify-live.mjs "$PAGE_URL"
+
       - name: Record deployment outcome
         if: always()
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
           DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          HTML_OUTCOME: ${{ steps.html_verify.outcome }}
+          ROUTE_OUTCOME: ${{ steps.live_routes.outcome }}
         run: |
-          if [ "$DEPLOY_OUTCOME" = "success" ] && [ "$VERIFY_OUTCOME" = "success" ]; then
+          if [ "$DEPLOY_OUTCOME" = "success" ] && [ "$HTML_OUTCOME" = "success" ] && [ "$ROUTE_OUTCOME" = "success" ]; then
             RESULT=PASS
           else
             RESULT=FAIL
@@ -126,9 +157,10 @@ jobs:
             echo "- Source commit: $GITHUB_SHA"
             echo "- Live URL: ${PAGE_URL:-Unavailable}"
             echo "- Deploy action: $DEPLOY_OUTCOME"
-            echo "- Live verification: $VERIFY_OUTCOME"
+            echo "- Homepage and assets: $HTML_OUTCOME"
+            echo "- Live route verification: $ROUTE_OUTCOME"
             echo "- Recorded at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-            echo '- Verification checks: live homepage, compiled asset paths, no raw /src/main.jsx reference, favicon availability'
+            echo '- Verification checks: compiled assets, no raw /src/main.jsx reference, favicon, every public route, header/main/footer rendering, console errors and failed local assets'
           } > docs/DEPLOYMENT_STATUS.md
 
           git pull --rebase origin main
@@ -142,7 +174,9 @@ jobs:
         if: always()
         env:
           DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          HTML_OUTCOME: ${{ steps.html_verify.outcome }}
+          ROUTE_OUTCOME: ${{ steps.live_routes.outcome }}
         run: |
           test "$DEPLOY_OUTCOME" = "success"
-          test "$VERIFY_OUTCOME" = "success"
+          test "$HTML_OUTCOME" = "success"
+          test "$ROUTE_OUTCOME" = "success"
