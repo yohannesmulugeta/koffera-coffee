@@ -5,6 +5,12 @@ on:
     branches: [main]
     paths:
       - .github/workflows/diagnostic.yml
+      - tests/**
+      - src/**
+      - package.json
+      - package-lock.json
+      - vite.config.js
+      - playwright.config.js
   workflow_dispatch:
 
 permissions:
@@ -87,5 +93,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/CI_STATUS.md
-          git diff --cached --quiet || git commit -m "Add CI diagnostic report"
+          git diff --cached --quiet || git commit -m "Update CI diagnostic report"
           git push
