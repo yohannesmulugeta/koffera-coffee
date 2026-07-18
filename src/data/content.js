@@ -1,43 +1,43 @@
-import {Building2,Coffee,FileCheck2,Globe2,Layers3,Leaf,PackageCheck,ShieldCheck,Users} from 'lucide-react';
+import {Building2,Coffee,FileCheck2,Globe2,Layers3,Leaf,PackageCheck,ShieldCheck,Users} from '../components/Icons';
 
 export const company={phone:'+251 920 318 757',email:'firaolkebede777@gmail.com',location:'Addis Ababa, Ethiopia',founder:'Firaol Kebede'};
 
 export const coffees=[
-{slug:'yirgacheffe-washed',name:'Yirgacheffe Washed',region:'Yirgacheffe',process:'Washed',tone:'gold',text:'Floral, citrus and tea-like sample profile. Final grade, crop year and lot details are required.',grade:'To confirm',cropYear:'To confirm',altitude:'To confirm',variety:'To confirm',cup:'Sample profile — verify before publishing',availability:'To confirm'},
-{slug:'guji-natural',name:'Guji Natural',region:'Guji',process:'Natural',tone:'red',text:'Fruit-led natural coffee sample prepared to show the future product presentation.',grade:'To confirm',cropYear:'To confirm',altitude:'To confirm',variety:'To confirm',cup:'Sample profile — verify before publishing',availability:'To confirm'},
-{slug:'sidama-washed',name:'Sidama Washed',region:'Sidama',process:'Washed',tone:'olive',text:'Balanced washed-coffee sample with space for verified cup and availability data.',grade:'To confirm',cropYear:'To confirm',altitude:'To confirm',variety:'To confirm',cup:'Sample profile — verify before publishing',availability:'To confirm'},
-{slug:'commercial-arabica',name:'Commercial Arabica',region:'Origin to confirm',process:'Commercial',tone:'brown',text:'Commercial-grade placeholder ready for final specification, screen size, moisture and packaging data.',grade:'To confirm',cropYear:'To confirm',altitude:'To confirm',variety:'To confirm',cup:'Technical profile to confirm',availability:'To confirm'}
+{slug:'yirgacheffe-washed',name:'Yirgacheffe Washed',region:'Yirgacheffe / Gedeo',process:'Washed',tone:'gold',text:'An illustrative washed-coffee profile showing the floral, citrus and tea-like character buyers often associate with Yirgacheffe.',grade:'Grade 1 demo',cropYear:'Current crop — confirm',altitude:'1,750–2,200 m demo range',variety:'Ethiopian landraces — confirm',cup:'Illustrative profile: jasmine, bergamot, lemon and black tea with a clean finish.',availability:'Ask for current offer',packaging:'60 kg jute with liner — example',moisture:'9.5–11.5% target — example',screen:'14+ example',certification:'Lot documents required'},
+{slug:'guji-natural',name:'Guji Natural',region:'Guji',process:'Natural',tone:'red',text:'A demonstration natural-coffee record with a fruit-led profile and the technical fields an international buyer expects to review.',grade:'Grade 1 demo',cropYear:'Current crop — confirm',altitude:'1,850–2,300 m demo range',variety:'Ethiopian landraces — confirm',cup:'Illustrative profile: blueberry, strawberry, cocoa and a syrupy body.',availability:'Ask for current offer',packaging:'60 kg jute with liner — example',moisture:'9.5–11.5% target — example',screen:'14+ example',certification:'Lot documents required'},
+{slug:'sidama-washed',name:'Sidama Washed',region:'Sidama',process:'Washed',tone:'olive',text:'A sample washed Sidama presentation with a balanced profile and clear commercial information for buyer review.',grade:'Grade 1 demo',cropYear:'Current crop — confirm',altitude:'1,700–2,200 m demo range',variety:'Ethiopian landraces — confirm',cup:'Illustrative profile: citrus, stone fruit, brown sugar and balanced acidity.',availability:'Ask for current offer',packaging:'60 kg jute with liner — example',moisture:'9.5–11.5% target — example',screen:'14+ example',certification:'Lot documents required'},
+{slug:'commercial-arabica',name:'Commercial Arabica',region:'Multiple origins — confirm',process:'Washed or natural',tone:'brown',text:'A commercial-coffee demonstration record prepared for final grade, screen, moisture, packaging and shipment information.',grade:'Commercial grade demo',cropYear:'Current crop — confirm',altitude:'Varies by lot',variety:'To be stated per lot',cup:'Balanced commercial profile; final description should come from the approved lot sample.',availability:'Ask for current offer',packaging:'60 kg jute — example',moisture:'Contract specification',screen:'Contract specification',certification:'Only when supported by lot documents'}
 ];
 
 export const origins=[
-['Yirgacheffe','gold','Sample origin page prepared for verified sourcing, processing and availability data.'],
-['Guji','red','Space for confirmed supplier relationships, lot information and coffee photography.'],
-['Sidama','olive','Prepared for Koffera’s verified regional story, processing methods and coffees.'],
-['Limu','brown','Origin content will be published only after sourcing information is confirmed.'],
-['Jimma','dark','A structured placeholder for commercial and specialty coffee information.']
+['Yirgacheffe','gold','Known internationally for refined washed and natural profiles. Add Koffera’s actual suppliers, stations, districts and available lots.'],
+['Guji','red','A major specialty-coffee region associated with expressive natural and washed coffees. Publish only confirmed sourcing relationships.'],
+['Sidama','olive','A broad coffee-producing area with diverse elevations and profiles. Link the final story to real lots and processing partners.'],
+['Limu','brown','Often presented as a clean, balanced washed-coffee origin. Confirm whether Koffera actively offers coffee from this area.'],
+['Jimma','dark','Relevant to both commercial and specialty discussions. Add verified grade, process, availability and supplier information.']
 ];
 
 export const serviceCards=[
-[Coffee,'Coffee sourcing','Present confirmed origins, grades and processing methods in a buyer-friendly format.'],
-[ShieldCheck,'Quality coordination','Explain sampling, cupping and pre-shipment checks using Koffera’s actual process.'],
-[FileCheck2,'Export documentation','Show the commercial and shipment documents available for each transaction.'],
-[PackageCheck,'Shipment support','Guide buyers from packaging confirmation through loading and shipment communication.']
+[Coffee,'Coffee sourcing','Match buyer requirements with confirmed Ethiopian origins, grades, processes and current availability.'],
+[ShieldCheck,'Quality coordination','Coordinate samples, physical information, cup evaluation and pre-shipment approval using the real company procedure.'],
+[FileCheck2,'Export documentation','Prepare the commercial and shipment documents required for the agreed transaction and destination.'],
+[PackageCheck,'Shipment support','Confirm packaging, markings, loading information and shipment communication with the buyer.']
 ];
 
 export const qualitySteps=[
-['01','Source and lot identification','Confirm the supplier, origin, lot reference and processing information.'],
-['02','Physical inspection','Record the checks Koffera actually performs before presenting a lot to buyers.'],
-['03','Sample preparation and cupping','Add the real sample-roasting, cupping and result-recording procedure.'],
-['04','Buyer sample approval','Explain how samples are requested, dispatched and approved before contracting.'],
-['05','Pre-shipment confirmation','Present the real inspection, documentation and approval process.'],
-['06','Shipment follow-up','Show how Koffera communicates loading, documents and shipment progress.']
+['01','Buyer requirement review','Record origin, grade, process, quantity, packaging, destination and expected purchase timing.'],
+['02','Lot identification','Match the enquiry with an available lot and document supplier, origin, process and basic physical information.'],
+['03','Sample preparation and evaluation','Prepare a representative sample, record cup observations and share available specifications.'],
+['04','Buyer sample approval','Dispatch the sample, collect feedback and confirm whether the approved sample will govern the contract.'],
+['05','Pre-shipment confirmation','Complete the agreed quality checks, packaging review and document preparation before loading.'],
+['06','Shipment and document follow-up','Share loading updates, shipping documents and communication required until handover.']
 ];
 
 export const marketSegments=[
-[Coffee,'Specialty roasters','Detailed origin, process and cup information for quality-focused purchasing teams.'],
-[Globe2,'Importers & distributors','Clear commercial information, documentation and shipment coordination.'],
-[Building2,'Private-label brands','A structured enquiry path for packaging and brand requirements, subject to capability confirmation.'],
-[Users,'Cafés & hospitality','Coffee selection and supply conversations for professional hospitality operators.'],
-[Layers3,'Retail coffee companies','Product and packaging information prepared for retail sourcing discussions.'],
-[Leaf,'Responsible sourcing partners','Space for verified traceability, sustainability and partnership evidence.']
+[Coffee,'Specialty roasters','Origin, process, cup profile, sample access and lot-level detail for quality-focused purchasing teams.'],
+[Globe2,'Importers & distributors','Commercial offers, documentation, packaging and shipment coordination for regional distribution.'],
+[Building2,'Private-label brands','A structured discussion for coffee selection, packaging requirements and brand execution, subject to capability confirmation.'],
+[Users,'Cafés & hospitality','Coffee selection and supply conversations for cafés, hotels, restaurants and hospitality operators.'],
+[Layers3,'Retail coffee companies','Product, packaging and supply information prepared for retail sourcing and brand planning.'],
+[Leaf,'Responsible sourcing partners','Traceability and sustainability information supported by real records rather than general claims.']
 ];
