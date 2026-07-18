@@ -5,6 +5,8 @@ export default defineConfig({
   base: '/koffera-coffee/',
   plugins: [react()],
   build: {
-    sourcemap: true,
+    outDir: 'dist',
+    emptyOutDir: true,
+    sourcemap: false,
   },
 });
