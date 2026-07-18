@@ -1,6 +1,6 @@
 # CI Diagnostic Report
 
-Generated from commit: 5bb7d055203d65bcb210c9de0f70fd3bebb838c3
+Generated from commit: 955870db52cb85fa344e7cb9aa273684458083e8
 
 | Check | Exit code | Result |
 |---|---:|---|
@@ -13,7 +13,7 @@ Generated from commit: 5bb7d055203d65bcb210c9de0f70fd3bebb838c3
 ## install log
 ```text
 
-added 139 packages in 4s
+added 139 packages in 3s
 ```
 
 ## lint log
@@ -64,7 +64,7 @@ dist/assets/RequestOfferPage-CQmuTGLu.js           5.18 kB │ gzip:  1.63 kB
 dist/assets/HomePage-BLyni5Wr.js                   8.72 kB │ gzip:  2.61 kB
 dist/assets/index-DckmM26y.js                    242.76 kB │ gzip: 77.83 kB
 
-[32m✓ built in 163ms[39m
+[32m✓ built in 165ms[39m
 ```
 
 ## playwright-install log
@@ -91,7 +91,7 @@ Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:11 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.5 MB in 1s (34.1 MB/s)
+Fetched 21.5 MB in 1s (17.7 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 202507 files and directories currently installed.)
 Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -193,23 +193,26 @@ Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) d
 
 ## test log
 ```text
+  ✘  36 [mobile-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success (retry #1) (30.3s)
 
-    Error: locator.fill: Error: strict mode violation: getByLabel('Company') resolved to 2 elements:
-        1) <input required="" name="company" autocomplete="organization"/> aka getByRole('textbox', { name: 'Company' })
-        2) <select required="" name="buyerType">…</select> aka getByLabel('Buyer typeSelect buyer')
 
+  1) [desktop-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
     Call log:
-      - waiting for getByLabel('Company')
+      - waiting for getByLabel('Buyer type', { exact: true })
 
 
-      55 |   await page.goto('#/request-offer');
-      56 |   await page.getByLabel('Full name').fill('Demo Buyer');
-    > 57 |   await page.getByLabel('Company').fill('Demo Coffee Company');
-         |                                    ^
-      58 |   await page.getByLabel('Business email').fill('buyer@example.com');
-      59 |   await page.getByLabel('Country').fill('Ethiopia');
-      60 |   await page.getByLabel('Buyer type').selectOption({ label: 'Specialty roaster' });
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:57:36
+      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
+      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
+    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
+         |                                                        ^
+      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
+      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
+      63 |   await page.getByLabel(/I agree/).check();
+        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium/test-failed-1.png
@@ -219,22 +222,21 @@ Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) d
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: locator.fill: Error: strict mode violation: getByLabel('Company') resolved to 2 elements:
-        1) <input required="" name="company" autocomplete="organization"/> aka getByRole('textbox', { name: 'Company' })
-        2) <select required="" name="buyerType">…</select> aka getByLabel('Buyer typeSelect buyer')
+    Test timeout of 30000ms exceeded.
 
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
     Call log:
-      - waiting for getByLabel('Company')
+      - waiting for getByLabel('Buyer type', { exact: true })
 
 
-      55 |   await page.goto('#/request-offer');
-      56 |   await page.getByLabel('Full name').fill('Demo Buyer');
-    > 57 |   await page.getByLabel('Company').fill('Demo Coffee Company');
-         |                                    ^
-      58 |   await page.getByLabel('Business email').fill('buyer@example.com');
-      59 |   await page.getByLabel('Country').fill('Ethiopia');
-      60 |   await page.getByLabel('Buyer type').selectOption({ label: 'Specialty roaster' });
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:57:36
+      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
+      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
+    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
+         |                                                        ^
+      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
+      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
+      63 |   await page.getByLabel(/I agree/).check();
+        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium-retry1/test-failed-1.png
@@ -252,22 +254,21 @@ Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) d
 
   2) [mobile-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
 
-    Error: locator.fill: Error: strict mode violation: getByLabel('Company') resolved to 2 elements:
-        1) <input required="" name="company" autocomplete="organization"/> aka getByRole('textbox', { name: 'Company' })
-        2) <select required="" name="buyerType">…</select> aka getByLabel('Buyer typeSelect buyer')
+    Test timeout of 30000ms exceeded.
 
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
     Call log:
-      - waiting for getByLabel('Company')
+      - waiting for getByLabel('Buyer type', { exact: true })
 
 
-      55 |   await page.goto('#/request-offer');
-      56 |   await page.getByLabel('Full name').fill('Demo Buyer');
-    > 57 |   await page.getByLabel('Company').fill('Demo Coffee Company');
-         |                                    ^
-      58 |   await page.getByLabel('Business email').fill('buyer@example.com');
-      59 |   await page.getByLabel('Country').fill('Ethiopia');
-      60 |   await page.getByLabel('Buyer type').selectOption({ label: 'Specialty roaster' });
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:57:36
+      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
+      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
+    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
+         |                                                        ^
+      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
+      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
+      63 |   await page.getByLabel(/I agree/).check();
+        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium/test-failed-1.png
@@ -277,22 +278,21 @@ Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) d
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: locator.fill: Error: strict mode violation: getByLabel('Company') resolved to 2 elements:
-        1) <input required="" name="company" autocomplete="organization"/> aka getByRole('textbox', { name: 'Company' })
-        2) <select required="" name="buyerType">…</select> aka getByLabel('Buyer typeSelect buyer')
+    Test timeout of 30000ms exceeded.
 
+    Error: locator.selectOption: Test timeout of 30000ms exceeded.
     Call log:
-      - waiting for getByLabel('Company')
+      - waiting for getByLabel('Buyer type', { exact: true })
 
 
-      55 |   await page.goto('#/request-offer');
-      56 |   await page.getByLabel('Full name').fill('Demo Buyer');
-    > 57 |   await page.getByLabel('Company').fill('Demo Coffee Company');
-         |                                    ^
-      58 |   await page.getByLabel('Business email').fill('buyer@example.com');
-      59 |   await page.getByLabel('Country').fill('Ethiopia');
-      60 |   await page.getByLabel('Buyer type').selectOption({ label: 'Specialty roaster' });
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:57:36
+      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
+      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
+    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
+         |                                                        ^
+      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
+      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
+      63 |   await page.getByLabel(/I agree/).check();
+        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium-retry1/test-failed-1.png
@@ -312,6 +312,6 @@ Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) d
     [desktop-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
     [mobile-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
   1 skipped
-  31 passed (19.9s)
+  31 passed (1.5m)
 ```
 
