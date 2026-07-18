@@ -1,6 +1,6 @@
 # CI Diagnostic Report
 
-Generated from commit: 955870db52cb85fa344e7cb9aa273684458083e8
+Generated from commit: 7afea1d065578e350139577995b3b80d0bc56847
 
 | Check | Exit code | Result |
 |---|---:|---|
@@ -8,7 +8,7 @@ Generated from commit: 955870db52cb85fa344e7cb9aa273684458083e8
 | lint | 0 | PASS |
 | build | 0 | PASS |
 | Playwright install | 0 | PASS |
-| route tests | 1 | FAIL |
+| route tests | 0 | PASS |
 
 ## install log
 ```text
@@ -36,35 +36,35 @@ rendering chunks...
 computing gzip size...
 dist/index.html                                    1.25 kB │ gzip:  0.54 kB
 dist/assets/index-3AJX09qp.css                    26.50 kB │ gzip:  6.33 kB
-dist/assets/DemoNotice-CRTlRzJP.js                 0.27 kB │ gzip:  0.20 kB
-dist/assets/SectionHeading-BN6Q_9Zo.js             0.36 kB │ gzip:  0.24 kB
-dist/assets/useDocumentMeta-DLrzsVMj.js            0.49 kB │ gzip:  0.31 kB
-dist/assets/PageHero-DcBixG7v.js                   0.57 kB │ gzip:  0.29 kB
-dist/assets/MediaPlaceholder-CmDDrI4E.js           0.59 kB │ gzip:  0.32 kB
-dist/assets/ScrollReveal-Ci1kBnyd.js               0.61 kB │ gzip:  0.41 kB
-dist/assets/CTASection-BUebOBm9.js                 0.68 kB │ gzip:  0.39 kB
-dist/assets/NotFoundPage-BPNGJz1y.js               0.87 kB │ gzip:  0.41 kB
+dist/assets/DemoNotice-DX63kbXD.js                 0.27 kB │ gzip:  0.20 kB
+dist/assets/SectionHeading-DCsQKkvp.js             0.36 kB │ gzip:  0.24 kB
+dist/assets/useDocumentMeta-CObBZviY.js            0.49 kB │ gzip:  0.31 kB
+dist/assets/PageHero-CCXu5-Fk.js                   0.57 kB │ gzip:  0.30 kB
+dist/assets/MediaPlaceholder-BNcMye9F.js           0.59 kB │ gzip:  0.32 kB
+dist/assets/ScrollReveal-Bw68ALNq.js               0.61 kB │ gzip:  0.41 kB
+dist/assets/CTASection-CA1rVFFY.js                 0.68 kB │ gzip:  0.39 kB
+dist/assets/NotFoundPage-CajdvBUQ.js               0.87 kB │ gzip:  0.41 kB
 dist/assets/markets-CYbI-uuW.js                    0.87 kB │ gzip:  0.45 kB
 dist/assets/origins-6b9YysOt.js                    1.26 kB │ gzip:  0.64 kB
 dist/assets/services-D2psxdnk.js                   1.64 kB │ gzip:  0.72 kB
-dist/assets/PrivacyPage-Ba23xkDK.js                2.06 kB │ gzip:  0.87 kB
-dist/assets/TermsPage-ZBJoLfxO.js                  2.11 kB │ gzip:  0.89 kB
-dist/assets/CoffeeCataloguePage-B-o7OQRP.js        2.61 kB │ gzip:  1.18 kB
-dist/assets/ResourcesPage-HI3Tyga_.js              2.61 kB │ gzip:  1.11 kB
-dist/assets/MarketsPage-oJ1qrXho.js                2.70 kB │ gzip:  1.17 kB
-dist/assets/FAQPage-CXSzJZoM.js                    2.80 kB │ gzip:  1.32 kB
-dist/assets/OriginsPage-v4TJ7xYz.js                3.03 kB │ gzip:  1.25 kB
-dist/assets/ContactPage-CAoOBo6m.js                3.26 kB │ gzip:  1.16 kB
-dist/assets/QualityTraceabilityPage-Dq0KZcMO.js    3.41 kB │ gzip:  1.28 kB
-dist/assets/ExportServicesPage-CQLCsWW3.js         3.46 kB │ gzip:  1.36 kB
-dist/assets/coffees-BUoiObPB.js                    3.76 kB │ gzip:  1.28 kB
-dist/assets/CoffeeDetailPage-B09IlJfL.js           4.36 kB │ gzip:  1.51 kB
-dist/assets/AboutPage-XlgqKJua.js                  4.61 kB │ gzip:  1.59 kB
-dist/assets/RequestOfferPage-CQmuTGLu.js           5.18 kB │ gzip:  1.63 kB
-dist/assets/HomePage-BLyni5Wr.js                   8.72 kB │ gzip:  2.61 kB
-dist/assets/index-DckmM26y.js                    242.76 kB │ gzip: 77.83 kB
+dist/assets/PrivacyPage-6raYUSlt.js                2.06 kB │ gzip:  0.87 kB
+dist/assets/TermsPage-Dls8aR5Q.js                  2.11 kB │ gzip:  0.90 kB
+dist/assets/CoffeeCataloguePage-BR-YSG1c.js        2.61 kB │ gzip:  1.19 kB
+dist/assets/ResourcesPage-CMV1HpkN.js              2.61 kB │ gzip:  1.11 kB
+dist/assets/MarketsPage-Bi2HoV90.js                2.70 kB │ gzip:  1.17 kB
+dist/assets/FAQPage-DbW9lx0m.js                    2.80 kB │ gzip:  1.32 kB
+dist/assets/OriginsPage-BIHd8EEY.js                3.03 kB │ gzip:  1.25 kB
+dist/assets/ContactPage-C07o_X1P.js                3.26 kB │ gzip:  1.16 kB
+dist/assets/QualityTraceabilityPage-BiY5rmf8.js    3.41 kB │ gzip:  1.28 kB
+dist/assets/ExportServicesPage-cffDuyT2.js         3.46 kB │ gzip:  1.36 kB
+dist/assets/coffees-Bd048P2g.js                    3.76 kB │ gzip:  1.29 kB
+dist/assets/CoffeeDetailPage-CwZPbAGR.js           4.36 kB │ gzip:  1.52 kB
+dist/assets/AboutPage-Bo5Uqkw-.js                  4.61 kB │ gzip:  1.59 kB
+dist/assets/RequestOfferPage-DTLbdf9m.js           5.29 kB │ gzip:  1.65 kB
+dist/assets/HomePage-BO-AEHjK.js                   8.72 kB │ gzip:  2.61 kB
+dist/assets/index-C7TMpMXo.js                    242.76 kB │ gzip: 77.82 kB
 
-[32m✓ built in 165ms[39m
+[32m✓ built in 180ms[39m
 ```
 
 ## playwright-install log
@@ -91,7 +91,7 @@ Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:11 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.5 MB in 1s (17.7 MB/s)
+Fetched 21.5 MB in 0s (96.8 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 202507 files and directories currently installed.)
 Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -193,125 +193,49 @@ Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) d
 
 ## test log
 ```text
-  ✘  36 [mobile-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success (retry #1) (30.3s)
+
+> koffera-coffee-website@1.0.0 test:e2e
+> playwright test
 
 
-  1) [desktop-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
+Running 34 tests using 2 workers
 
-    Test timeout of 30000ms exceeded.
+  ✓   2 [desktop-chromium] › tests/routes.spec.js:22:3 › #/coffees renders without console or asset failures (1.1s)
+  ✓   1 [desktop-chromium] › tests/routes.spec.js:22:3 › #/ renders without console or asset failures (1.1s)
+  ✓   3 [desktop-chromium] › tests/routes.spec.js:22:3 › #/coffees/yirgacheffe-washed renders without console or asset failures (998ms)
+  ✓   4 [desktop-chromium] › tests/routes.spec.js:22:3 › #/origins renders without console or asset failures (983ms)
+  ✓   5 [desktop-chromium] › tests/routes.spec.js:22:3 › #/quality-traceability renders without console or asset failures (988ms)
+  ✓   6 [desktop-chromium] › tests/routes.spec.js:22:3 › #/export-services renders without console or asset failures (971ms)
+  ✓   8 [desktop-chromium] › tests/routes.spec.js:22:3 › #/resources renders without console or asset failures (973ms)
+  ✓   7 [desktop-chromium] › tests/routes.spec.js:22:3 › #/markets renders without console or asset failures (1.0s)
+  ✓   9 [desktop-chromium] › tests/routes.spec.js:22:3 › #/faq renders without console or asset failures (942ms)
+  ✓  10 [desktop-chromium] › tests/routes.spec.js:22:3 › #/request-offer renders without console or asset failures (943ms)
+  ✓  11 [desktop-chromium] › tests/routes.spec.js:22:3 › #/about renders without console or asset failures (954ms)
+  ✓  12 [desktop-chromium] › tests/routes.spec.js:22:3 › #/contact renders without console or asset failures (960ms)
+  ✓  13 [desktop-chromium] › tests/routes.spec.js:22:3 › #/privacy renders without console or asset failures (923ms)
+  ✓  14 [desktop-chromium] › tests/routes.spec.js:22:3 › #/terms renders without console or asset failures (912ms)
+  -  16 [desktop-chromium] › tests/routes.spec.js:44:1 › mobile navigation opens and reaches the catalogue
+  ✓  15 [desktop-chromium] › tests/routes.spec.js:22:3 › #/missing-page renders without console or asset failures (936ms)
+  ✓  17 [desktop-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success (2.4s)
+  ✓  18 [mobile-chromium] › tests/routes.spec.js:22:3 › #/ renders without console or asset failures (1.3s)
+  ✓  19 [mobile-chromium] › tests/routes.spec.js:22:3 › #/coffees/yirgacheffe-washed renders without console or asset failures (1.2s)
+  ✓  20 [mobile-chromium] › tests/routes.spec.js:22:3 › #/coffees renders without console or asset failures (1.3s)
+  ✓  21 [mobile-chromium] › tests/routes.spec.js:22:3 › #/origins renders without console or asset failures (1.2s)
+  ✓  22 [mobile-chromium] › tests/routes.spec.js:22:3 › #/quality-traceability renders without console or asset failures (1.3s)
+  ✓  23 [mobile-chromium] › tests/routes.spec.js:22:3 › #/export-services renders without console or asset failures (1.2s)
+  ✓  24 [mobile-chromium] › tests/routes.spec.js:22:3 › #/markets renders without console or asset failures (1.2s)
+  ✓  25 [mobile-chromium] › tests/routes.spec.js:22:3 › #/resources renders without console or asset failures (1.2s)
+  ✓  26 [mobile-chromium] › tests/routes.spec.js:22:3 › #/faq renders without console or asset failures (1.2s)
+  ✓  27 [mobile-chromium] › tests/routes.spec.js:22:3 › #/request-offer renders without console or asset failures (1.2s)
+  ✓  28 [mobile-chromium] › tests/routes.spec.js:22:3 › #/about renders without console or asset failures (1.2s)
+  ✓  29 [mobile-chromium] › tests/routes.spec.js:22:3 › #/contact renders without console or asset failures (1.2s)
+  ✓  30 [mobile-chromium] › tests/routes.spec.js:22:3 › #/privacy renders without console or asset failures (1.1s)
+  ✓  31 [mobile-chromium] › tests/routes.spec.js:22:3 › #/terms renders without console or asset failures (1.1s)
+  ✓  32 [mobile-chromium] › tests/routes.spec.js:22:3 › #/missing-page renders without console or asset failures (1.2s)
+  ✓  33 [mobile-chromium] › tests/routes.spec.js:44:1 › mobile navigation opens and reaches the catalogue (1.1s)
+  ✓  34 [mobile-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success (2.5s)
 
-    Error: locator.selectOption: Test timeout of 30000ms exceeded.
-    Call log:
-      - waiting for getByLabel('Buyer type', { exact: true })
-
-
-      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
-      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
-    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
-         |                                                        ^
-      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
-      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
-      63 |   await page.getByLabel(/I agree/).check();
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator.selectOption: Test timeout of 30000ms exceeded.
-    Call log:
-      - waiting for getByLabel('Buyer type', { exact: true })
-
-
-      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
-      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
-    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
-         |                                                        ^
-      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
-      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
-      63 |   await page.getByLabel(/I agree/).check();
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium-retry1/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-desktop-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2) [mobile-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator.selectOption: Test timeout of 30000ms exceeded.
-    Call log:
-      - waiting for getByLabel('Buyer type', { exact: true })
-
-
-      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
-      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
-    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
-         |                                                        ^
-      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
-      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
-      63 |   await page.getByLabel(/I agree/).check();
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium/error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    Test timeout of 30000ms exceeded.
-
-    Error: locator.selectOption: Test timeout of 30000ms exceeded.
-    Call log:
-      - waiting for getByLabel('Buyer type', { exact: true })
-
-
-      58 |   await page.getByLabel('Business email', { exact: true }).fill('buyer@example.com');
-      59 |   await page.getByLabel('Country', { exact: true }).fill('Ethiopia');
-    > 60 |   await page.getByLabel('Buyer type', { exact: true }).selectOption({ label: 'Specialty roaster' });
-         |                                                        ^
-      61 |   await page.getByLabel('Estimated quantity', { exact: true }).fill('100 bags');
-      62 |   await page.getByLabel('Message', { exact: true }).fill('Demo coffee request');
-      63 |   await page.getByLabel(/I agree/).check();
-        at /home/runner/work/koffera-coffee/koffera-coffee/tests/routes.spec.js:60:56
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium-retry1/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium-retry1/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium-retry1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/routes-request-form-report-fc3dd-tus-instead-of-fake-success-mobile-chromium-retry1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2 failed
-    [desktop-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
-    [mobile-chromium] › tests/routes.spec.js:54:1 › request form reports demo status instead of fake success 
   1 skipped
-  31 passed (1.5m)
+  33 passed (23.8s)
 ```
 
