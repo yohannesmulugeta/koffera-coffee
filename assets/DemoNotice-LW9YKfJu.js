@@ -1,0 +1,1 @@
+import{t as e}from"./index-D9NfQnqS.js";var t=e();function n({children:e}){return(0,t.jsxs)(`aside`,{className:`demo-notice`,"aria-label":`Demo content notice`,children:[(0,t.jsx)(`span`,{"aria-hidden":`true`,children:`i`}),(0,t.jsx)(`p`,{children:e})]})}export{n as t};
