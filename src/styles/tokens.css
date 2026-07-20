@@ -1,22 +1,66 @@
 :root {
-  --espresso: #24170f;
-  --coffee: #6f543d;
-  --mocha: #8b6b50;
-  --caramel: #b88b5e;
+  --espresso-950: #1c120c;
+  --espresso-900: #24170f;
+  --coffee-800: #4b3425;
+  --coffee-700: #6f543d;
+  --coffee-600: #8b6b50;
+  --caramel-500: #b88b5e;
+  --parchment-100: #eee6db;
+  --cream-50: #f7f1e9;
+  --paper-0: #fbfaf7;
+  --ink-900: #2a211b;
+  --muted-600: #786c63;
+  --origin-green: #52614b;
+  --cherry-red: #8c3f32;
+
+  /* Backward-compatible aliases used by existing components. */
+  --espresso: var(--espresso-900);
+  --coffee: var(--coffee-700);
+  --mocha: var(--coffee-600);
+  --caramel: var(--caramel-500);
   --cream: #f3eee7;
-  --warm: #f7f1e9;
-  --paper: #fbfaf7;
+  --warm: var(--cream-50);
+  --paper: var(--paper-0);
   --white: #ffffff;
-  --ink: #2a211b;
-  --muted: #786c63;
-  --green: #52614b;
+  --ink: var(--ink-900);
+  --muted: var(--muted-600);
+  --green: var(--origin-green);
+
   --line: rgba(75, 53, 38, 0.16);
+  --line-strong: rgba(75, 53, 38, 0.34);
+  --line-inverse: rgba(255, 255, 255, 0.2);
+  --overlay-dark: rgba(17, 10, 6, 0.72);
+  --overlay-soft: rgba(17, 10, 6, 0.42);
+
   --shadow-soft: 0 14px 42px rgba(53, 34, 22, 0.09);
   --shadow-large: 0 28px 80px rgba(53, 34, 22, 0.16);
-  --radius-small: 12px;
-  --radius-medium: 20px;
-  --radius-large: 28px;
+
+  --radius-small: 6px;
+  --radius-medium: 10px;
+  --radius-large: 16px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-40: 160px;
+
   --container: 1200px;
+  --container-wide: 1360px;
+  --page-gutter: clamp(20px, 5vw, 80px);
+  --section-space: clamp(88px, 11vw, 160px);
+
   --serif: Georgia, 'Times New Roman', serif;
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --ease-editorial: cubic-bezier(.22, 1, .36, 1);
+  --duration-fast: 180ms;
+  --duration-medium: 560ms;
+  --duration-slow: 820ms;
 }
