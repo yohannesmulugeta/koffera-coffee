@@ -1,0 +1,33 @@
+.brand__bean {
+  background: var(--coffee);
+}
+
+.brand--light .brand__bean {
+  background: var(--white);
+}
+
+@media (min-width: 861px) {
+  .koffera-scroll-world__rail {
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 18px;
+    background: linear-gradient(90deg, rgba(18, 11, 7, 0.06), rgba(18, 11, 7, 0.34));
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.13);
+    backdrop-filter: blur(7px);
+  }
+
+  .koffera-scroll-world__dot {
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.78);
+  }
+
+  .koffera-scroll-world__dot i {
+    background: rgba(18, 11, 7, 0.24);
+    box-shadow: 0 1px 9px rgba(0, 0, 0, 0.38);
+  }
+
+  .koffera-scroll-world__hint {
+    color: rgba(255, 255, 255, 0.72);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.82);
+  }
+}
