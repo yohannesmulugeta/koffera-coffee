@@ -7,6 +7,7 @@ on:
 permissions:
   actions: write
   contents: read
+  pull-requests: write
 
 concurrency:
   group: validate-pr-${{ github.event.pull_request.number }}
@@ -92,6 +93,14 @@ jobs:
 
           echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
           echo "Production workflow run: $RUN_ID"
+
+      - name: Report production workflow run
+        if: startsWith(github.event.pull_request.title, '[deploy]')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ steps.production.outputs.run_id }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Tracked GitHub Pages production workflow run: $RUN_ID"
 
       - name: Watch production deployment
         if: startsWith(github.event.pull_request.title, '[deploy]')
