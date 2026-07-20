@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths-ignore:
       - docs/DEPLOYMENT_STATUS.md
+  issues:
+    types: [opened]
   workflow_dispatch:
 
 permissions:
@@ -18,10 +20,13 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'issues' || startsWith(github.event.issue.title, '[deploy]')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v5
+        with:
+          ref: main
 
       - name: Setup Node
         uses: actions/setup-node@v5
@@ -121,7 +126,7 @@ jobs:
             echo '# Deployment Status'
             echo
             echo "- Result: $RESULT"
-            echo "- Source commit: $GITHUB_SHA"
+            echo "- Source commit: $(git rev-parse HEAD)"
             echo "- Live URL: ${PAGE_URL:-Unavailable}"
             echo "- Deploy action: $DEPLOY_OUTCOME"
             echo "- Homepage and assets: $VERIFY_OUTCOME"
