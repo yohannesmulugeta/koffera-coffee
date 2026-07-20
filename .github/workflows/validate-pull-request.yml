@@ -5,7 +5,9 @@ on:
     branches: [main]
 
 permissions:
+  actions: write
   contents: read
+  pull-requests: write
 
 concurrency:
   group: validate-pr-${{ github.event.pull_request.number }}
@@ -44,3 +46,76 @@ jobs:
 
       - name: Route, console, asset and responsive tests
         run: npm run test:e2e
+
+      - name: Dispatch production workflow on trusted main
+        if: startsWith(github.event.pull_request.title, '[deploy]')
+        id: dispatch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RESPONSE=$(gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            "/repos/${GITHUB_REPOSITORY}/actions/workflows/deploy.yml/dispatches" \
+            -f ref=main)
+
+          RUN_ID=$(printf '%s' "$RESPONSE" | jq -r '.workflow_run_id // empty')
+
+          if [ -z "$RUN_ID" ]; then
+            echo "The workflow dispatch response did not include a run ID."
+            printf '%s\n' "$RESPONSE"
+            exit 1
+          fi
+
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "Dispatched production workflow run $RUN_ID on main."
+
+      - name: Report production run ID
+        if: startsWith(github.event.pull_request.title, '[deploy]')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ steps.dispatch.outputs.run_id }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Production deployment dispatched on trusted main. Workflow run ID: $RUN_ID"
+
+      - name: Watch production deployment
+        if: startsWith(github.event.pull_request.title, '[deploy]')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ steps.dispatch.outputs.run_id }}
+        run: gh run watch "$RUN_ID" --repo "$GITHUB_REPOSITORY" --exit-status
+
+      - name: Verify editorial homepage is live
+        if: startsWith(github.event.pull_request.title, '[deploy]')
+        env:
+          PAGE_URL: https://yohannesmulugeta.github.io/koffera-coffee/
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for attempt in {1..18}; do
+            if curl --fail --silent --show-error --location "$PAGE_URL" --output /tmp/live.html; then
+              break
+            fi
+
+            if [ "$attempt" -eq 18 ]; then
+              echo "The deployed homepage did not become available."
+              exit 1
+            fi
+
+            sleep 10
+          done
+
+          grep -q '/koffera-coffee/assets/' /tmp/live.html
+          ! grep -q '/src/main.jsx' /tmp/live.html
+
+          ASSET_PATH=$(grep -oE '/koffera-coffee/assets/[^" ]+\.js' /tmp/live.html | head -n 1)
+          test -n "$ASSET_PATH"
+          curl --fail --silent --show-error --location "https://yohannesmulugeta.github.io${ASSET_PATH}" --output /tmp/app.js
+          test -s /tmp/app.js
+
+          grep -q 'Ethiopian coffee, carried from origin to market with clarity' /tmp/app.js
