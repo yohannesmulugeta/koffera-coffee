@@ -2,4 +2,4 @@
 
 Deploy the current `main` branch containing the editorial Koffera homepage to GitHub Pages and verify the compiled production output.
 
-This update triggers the visible owner-only production deployment check.
+This update triggers the trusted owner deployment from the protected `main` context.
