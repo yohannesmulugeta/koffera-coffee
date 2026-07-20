@@ -100,7 +100,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ steps.production.outputs.run_id }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Tracked GitHub Pages production workflow run: $RUN_ID"
+        run: |
+          gh pr comment "$PR_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --body "Tracked GitHub Pages production workflow run: $RUN_ID"
 
       - name: Watch production deployment
         if: startsWith(github.event.pull_request.title, '[deploy]')
