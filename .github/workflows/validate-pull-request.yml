@@ -46,8 +46,106 @@ jobs:
       - name: Route, console, asset and responsive tests
         run: npm run test:e2e
 
-      - name: Dispatch production deployment on main
+      - name: Dispatch and locate production deployment
+        if: startsWith(github.event.pull_request.title, '[deploy]')
+        id: production
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BEFORE_ID=$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --workflow deploy.yml \
+            --event workflow_dispatch \
+            --branch main \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId // 0')
+
+          gh workflow run deploy.yml --ref main --repo "$GITHUB_REPOSITORY"
+
+          RUN_ID=''
+          for attempt in {1..20}; do
+            CANDIDATE=$(gh run list \
+              --repo "$GITHUB_REPOSITORY" \
+              --workflow deploy.yml \
+              --event workflow_dispatch \
+              --branch main \
+              --limit 1 \
+              --json databaseId \
+              --jq '.[0].databaseId // 0')
+
+            if [ "$CANDIDATE" != "0" ] && [ "$CANDIDATE" != "$BEFORE_ID" ]; then
+              RUN_ID="$CANDIDATE"
+              break
+            fi
+
+            sleep 3
+          done
+
+          if [ -z "$RUN_ID" ]; then
+            echo "Unable to locate the production deployment run."
+            exit 1
+          fi
+
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "Production workflow run: $RUN_ID"
+
+      - name: Watch production deployment
         if: startsWith(github.event.pull_request.title, '[deploy]')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy.yml --ref main --repo "$GITHUB_REPOSITORY"
+          RUN_ID: ${{ steps.production.outputs.run_id }}
+        run: gh run watch "$RUN_ID" --repo "$GITHUB_REPOSITORY" --exit-status
+
+      - name: Verify editorial homepage is live
+        if: startsWith(github.event.pull_request.title, '[deploy]')
+        env:
+          PAGE_URL: https://yohannesmulugeta.github.io/koffera-coffee/
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for attempt in {1..18}; do
+            if curl --fail --silent --show-error --location "$PAGE_URL" --output /tmp/live.html; then
+              break
+            fi
+
+            if [ "$attempt" -eq 18 ]; then
+              echo "The deployed homepage did not become available."
+              exit 1
+            fi
+
+            sleep 10
+          done
+
+          grep -q '/koffera-coffee/assets/' /tmp/live.html
+          ! grep -q '/src/main.jsx' /tmp/live.html
+
+          node --input-type=module <<'NODE'
+          import { chromium } from '@playwright/test';
+
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage();
+          const errors = [];
+          page.on('console', (message) => {
+            if (message.type() === 'error') errors.push(message.text());
+          });
+          page.on('pageerror', (error) => errors.push(error.message));
+
+          await page.goto('https://yohannesmulugeta.github.io/koffera-coffee/', {
+            waitUntil: 'networkidle',
+          });
+          await page.getByText('Ethiopian coffee, carried from origin to market with clarity.').waitFor({
+            state: 'visible',
+            timeout: 30000,
+          });
+
+          if (errors.length > 0) {
+            throw new Error(`Live browser errors: ${errors.join(' | ')}`);
+          }
+
+          await browser.close();
+          NODE
