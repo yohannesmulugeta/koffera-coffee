@@ -11,6 +11,7 @@ import './styles/pages.css';
 import './styles/animations.css';
 import './styles/responsive.css';
 import './styles/scroll-world.css';
+import './styles/scroll-world-motion.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
