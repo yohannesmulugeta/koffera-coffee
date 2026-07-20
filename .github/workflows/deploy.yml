@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -53,13 +53,9 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        continue-on-error: true
         uses: actions/deploy-pages@v4
 
       - name: Verify live homepage and compiled assets
-        id: verify
-        if: steps.deployment.outcome == 'success'
-        continue-on-error: true
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         shell: bash
@@ -94,51 +90,15 @@ jobs:
           curl --fail --silent --show-error --location "${PAGE_URL}favicon.svg" --output /tmp/favicon.svg
           grep -q '<svg' /tmp/favicon.svg
 
-      - name: Checkout main for deployment record
-        if: always()
-        uses: actions/checkout@v5
-        with:
-          ref: main
-
-      - name: Record deployment outcome
-        if: always()
+      - name: Publish deployment summary
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-          DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
-        shell: bash
         run: |
-          if [ "$DEPLOY_OUTCOME" = "success" ] && [ "$VERIFY_OUTCOME" = "success" ]; then
-            RESULT=PASS
-          else
-            RESULT=FAIL
-          fi
-
-          mkdir -p docs
           {
-            echo '# Deployment Status'
+            echo '## Koffera GitHub Pages deployment'
             echo
-            echo "- Result: $RESULT"
-            echo "- Source commit: $(git rev-parse HEAD)"
-            echo "- Live URL: ${PAGE_URL:-Unavailable}"
-            echo "- Deploy action: $DEPLOY_OUTCOME"
-            echo "- Homepage and assets: $VERIFY_OUTCOME"
-            echo "- Recorded at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-            echo '- Verification checks: production build, compiled asset paths, JavaScript bundle availability, no raw /src/main.jsx reference, and favicon availability'
-          } > docs/DEPLOYMENT_STATUS.md
-
-          git pull --rebase origin main
-          git add docs/DEPLOYMENT_STATUS.md
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git diff --cached --quiet || git commit -m "Record GitHub Pages deployment outcome"
-          git push
-
-      - name: Fail when deployment verification did not pass
-        if: always()
-        env:
-          DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
-        run: |
-          test "$DEPLOY_OUTCOME" = "success"
-          test "$VERIFY_OUTCOME" = "success"
+            echo "- Live URL: $PAGE_URL"
+            echo '- Production build: passed'
+            echo '- Pages deployment: passed'
+            echo '- Homepage and compiled assets: verified'
+          } >> "$GITHUB_STEP_SUMMARY"
