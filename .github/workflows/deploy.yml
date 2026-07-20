@@ -7,6 +7,9 @@ on:
       - docs/DEPLOYMENT_STATUS.md
   issues:
     types: [opened]
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened]
   workflow_dispatch:
 
 permissions:
@@ -20,7 +23,14 @@ concurrency:
 
 jobs:
   build:
-    if: github.event_name != 'issues' || startsWith(github.event.issue.title, '[deploy]')
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issues' && startsWith(github.event.issue.title, '[deploy]')) ||
+      (github.event_name == 'pull_request_target' &&
+       startsWith(github.event.pull_request.title, '[deploy]') &&
+       github.event.pull_request.head.repo.full_name == github.repository &&
+       github.event.pull_request.user.login == github.repository_owner)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
