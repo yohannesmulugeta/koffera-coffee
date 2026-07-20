@@ -5,14 +5,9 @@ on:
     branches: [main]
     paths-ignore:
       - docs/DEPLOYMENT_STATUS.md
-  issues:
-    types: [opened]
-  pull_request:
-    branches: [main]
-    types: [opened, reopened, synchronize]
-  pull_request_target:
-    branches: [main]
-    types: [opened, reopened]
+  workflow_run:
+    workflows: ["Validate Pull Request"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -29,14 +24,13 @@ jobs:
     if: >-
       github.event_name == 'push' ||
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issues' && startsWith(github.event.issue.title, '[deploy]')) ||
-      ((github.event_name == 'pull_request' || github.event_name == 'pull_request_target') &&
-       startsWith(github.event.pull_request.title, '[deploy]') &&
-       github.event.pull_request.head.repo.full_name == github.repository &&
-       github.event.pull_request.user.login == github.repository_owner)
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'pull_request' &&
+       github.event.workflow_run.head_branch == 'ops/deploy-live')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
+      - name: Checkout trusted main
         uses: actions/checkout@v5
         with:
           ref: main
