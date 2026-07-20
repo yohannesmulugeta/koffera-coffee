@@ -19,6 +19,13 @@ page.on('pageerror', (error) => consoleErrors.push(error.message));
 await page.goto(baseUrl, { waitUntil: 'networkidle' });
 await page.waitForSelector('.koffera-scroll-world');
 await page.waitForFunction(() => [...document.images].every((image) => image.complete));
+await page.evaluate(() => {
+  document.documentElement.style.scrollBehavior = 'auto';
+  document.body.style.scrollBehavior = 'auto';
+  window.scrollTo(0, 0);
+});
+await page.waitForTimeout(250);
+await page.screenshot({ path: `${outputDir}/00-homepage-top.png`, fullPage: false });
 
 const section = await page.locator('.koffera-scroll-world').evaluate((element) => ({
   top: element.offsetTop,
@@ -31,17 +38,13 @@ const scrollable = Math.max(section.height - section.viewport, 1);
 for (let index = 0; index < sceneLabels.length; index += 1) {
   const ratio = index / Math.max(sceneLabels.length - 1, 1);
   const y = section.top + ratio * scrollable;
-  await page.evaluate((target) => window.scrollTo(0, target), y);
-  await page.waitForTimeout(700);
+  await page.evaluate((target) => window.scrollTo({ top: target, left: 0, behavior: 'instant' }), y);
+  await page.waitForTimeout(300);
   await page.screenshot({
     path: `${outputDir}/${String(index + 1).padStart(2, '0')}-${sceneLabels[index]}.png`,
     fullPage: false,
   });
 }
-
-await page.evaluate(() => window.scrollTo(0, 0));
-await page.waitForTimeout(500);
-await page.screenshot({ path: `${outputDir}/00-homepage-top.png`, fullPage: false });
 
 await fs.writeFile(
   `${outputDir}/console-errors.json`,
