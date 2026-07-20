@@ -8,6 +8,7 @@ on:
 permissions:
   actions: write
   contents: read
+  pull-requests: write
 
 concurrency:
   group: direct-koffera-pages
@@ -65,6 +66,13 @@ jobs:
 
           echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
           echo "Dispatched production workflow run $RUN_ID on main."
+
+      - name: Report production run ID
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ steps.dispatch.outputs.run_id }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Production deployment dispatched on trusted main. Workflow run ID: $RUN_ID"
 
       - name: Watch production deployment
         env:
