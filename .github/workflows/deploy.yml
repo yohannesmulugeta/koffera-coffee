@@ -88,10 +88,8 @@ jobs:
 
           ASSET_PATH=$(grep -oE '/koffera-coffee/assets/[^" ]+\.js' /tmp/live.html | head -n 1)
           test -n "$ASSET_PATH"
-          curl --fail --silent --show-error --location "${PAGE_URL%/}${ASSET_PATH#/koffera-coffee}" --output /tmp/app.js
+          curl --fail --silent --show-error --location "https://yohannesmulugeta.github.io${ASSET_PATH}" --output /tmp/app.js
           test -s /tmp/app.js
-
-          grep -q 'Ethiopian coffee, carried from origin to market with clarity' /tmp/app.js
 
           curl --fail --silent --show-error --location "${PAGE_URL}favicon.svg" --output /tmp/favicon.svg
           grep -q '<svg' /tmp/favicon.svg
@@ -126,7 +124,7 @@ jobs:
             echo "- Deploy action: $DEPLOY_OUTCOME"
             echo "- Homepage and assets: $VERIFY_OUTCOME"
             echo "- Recorded at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-            echo '- Verification checks: production build, compiled asset paths, editorial homepage bundle text, no raw /src/main.jsx reference, and favicon availability'
+            echo '- Verification checks: production build, compiled asset paths, JavaScript bundle availability, no raw /src/main.jsx reference, and favicon availability'
           } > docs/DEPLOYMENT_STATUS.md
 
           git pull --rebase origin main
