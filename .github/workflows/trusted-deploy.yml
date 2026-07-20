@@ -1,0 +1,164 @@
+name: Trusted Owner Pages Deployment
+
+on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: trusted-owner-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: >-
+      startsWith(github.event.pull_request.title, '[deploy]') &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout trusted main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload production artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Verify live homepage and compiled assets
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for attempt in {1..18}; do
+            if curl --fail --silent --show-error --location "$PAGE_URL" --output /tmp/live.html; then
+              break
+            fi
+
+            if [ "$attempt" -eq 18 ]; then
+              echo "The deployed homepage did not become available."
+              exit 1
+            fi
+
+            sleep 10
+          done
+
+          grep -q '/koffera-coffee/assets/' /tmp/live.html
+
+          if grep -q '/src/main.jsx' /tmp/live.html; then
+            echo "Raw Vite source was found in the deployed HTML."
+            exit 1
+          fi
+
+          ASSET_PATH=$(grep -oE '/koffera-coffee/assets/[^" ]+\.js' /tmp/live.html | head -n 1)
+          test -n "$ASSET_PATH"
+          curl --fail --silent --show-error --location "${PAGE_URL%/}${ASSET_PATH#/koffera-coffee}" --output /tmp/app.js
+          test -s /tmp/app.js
+
+          curl --fail --silent --show-error --location "${PAGE_URL}favicon.svg" --output /tmp/favicon.svg
+          grep -q '<svg' /tmp/favicon.svg
+
+  finalize:
+    if: >-
+      always() &&
+      startsWith(github.event.pull_request.title, '[deploy]') &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.user.login == github.repository_owner
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Record deployment result
+        env:
+          BUILD_RESULT: ${{ needs.build.result }}
+          DEPLOY_RESULT: ${{ needs.deploy.result }}
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        shell: bash
+        run: |
+          if [ "$BUILD_RESULT" = "success" ] && [ "$DEPLOY_RESULT" = "success" ]; then
+            RESULT=PASS
+          else
+            RESULT=FAIL
+          fi
+
+          mkdir -p docs
+          {
+            echo '# Deployment Status'
+            echo
+            echo "- Result: $RESULT"
+            echo "- Source commit: $(git rev-parse HEAD)"
+            echo "- Live URL: ${PAGE_URL:-https://yohannesmulugeta.github.io/koffera-coffee/}"
+            echo "- Build: $BUILD_RESULT"
+            echo "- Deploy and live verification: $DEPLOY_RESULT"
+            echo "- Recorded at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
+            echo '- Verification checks: production build, compiled asset paths, JavaScript bundle availability, no raw /src/main.jsx reference, and favicon availability'
+          } > docs/DEPLOYMENT_STATUS.md
+
+          git pull --rebase origin main
+          git add docs/DEPLOYMENT_STATUS.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git diff --cached --quiet || git commit -m "Record GitHub Pages deployment outcome"
+          git push
+
+      - name: Report result on deployment pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BUILD_RESULT: ${{ needs.build.result }}
+          DEPLOY_RESULT: ${{ needs.deploy.result }}
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        shell: bash
+        run: |
+          if [ "$BUILD_RESULT" = "success" ] && [ "$DEPLOY_RESULT" = "success" ]; then
+            gh pr comment "$PR_NUMBER" --body "✅ GitHub Pages deployment passed. Live site: ${PAGE_URL:-https://yohannesmulugeta.github.io/koffera-coffee/}"
+          else
+            gh pr comment "$PR_NUMBER" --body "❌ GitHub Pages deployment failed. Build: $BUILD_RESULT. Deploy/live verification: $DEPLOY_RESULT."
+            exit 1
+          fi
