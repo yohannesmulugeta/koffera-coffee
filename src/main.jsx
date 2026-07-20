@@ -12,6 +12,7 @@ import './styles/animations.css';
 import './styles/responsive.css';
 import './styles/scroll-world.css';
 import './styles/scroll-world-motion.css';
+import './styles/desktop-cinematic-polish.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
