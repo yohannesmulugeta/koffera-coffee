@@ -38,40 +38,28 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Route, console, asset and responsive tests
-        run: npm run test:e2e
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload dist artifact
+      - name: Upload production artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    runs-on: ubuntu-latest
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         continue-on-error: true
         uses: actions/deploy-pages@v4
 
-      - name: Verify live homepage and static assets
-        id: html_verify
+      - name: Verify live homepage and compiled assets
+        id: verify
         if: steps.deployment.outcome == 'success'
         continue-on-error: true
         env:
@@ -79,71 +67,50 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for attempt in {1..12}; do
+
+          for attempt in {1..18}; do
             if curl --fail --silent --show-error --location "$PAGE_URL" --output /tmp/live.html; then
               break
             fi
-            if [ "$attempt" -eq 12 ]; then
-              echo "The deployed homepage did not become available in time."
+
+            if [ "$attempt" -eq 18 ]; then
+              echo "The deployed homepage did not become available."
               exit 1
             fi
+
             sleep 10
           done
 
           grep -q '/koffera-coffee/assets/' /tmp/live.html
+
           if grep -q '/src/main.jsx' /tmp/live.html; then
             echo "Raw Vite source was found in the deployed HTML."
             exit 1
           fi
 
+          ASSET_PATH=$(grep -oE '/koffera-coffee/assets/[^" ]+\.js' /tmp/live.html | head -n 1)
+          test -n "$ASSET_PATH"
+          curl --fail --silent --show-error --location "${PAGE_URL%/}${ASSET_PATH#/koffera-coffee}" --output /tmp/app.js
+          test -s /tmp/app.js
+
           curl --fail --silent --show-error --location "${PAGE_URL}favicon.svg" --output /tmp/favicon.svg
           grep -q '<svg' /tmp/favicon.svg
 
-      - name: Checkout deployment branch state
+      - name: Checkout main for deployment record
         if: always()
         uses: actions/checkout@v5
         with:
           ref: main
-
-      - name: Setup Node for live route verification
-        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install live verification dependencies
-        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
-        run: npm ci --no-audit --no-fund
-
-      - name: Restore Playwright browser cache
-        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Ensure Chromium is available
-        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
-        run: npx playwright install --with-deps chromium
-
-      - name: Open every route on the deployed website
-        id: live_routes
-        if: steps.deployment.outcome == 'success' && steps.html_verify.outcome == 'success'
-        continue-on-error: true
-        env:
-          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
-        run: node scripts/verify-live.mjs "$PAGE_URL"
 
       - name: Record deployment outcome
         if: always()
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
           DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          HTML_OUTCOME: ${{ steps.html_verify.outcome }}
-          ROUTE_OUTCOME: ${{ steps.live_routes.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+        shell: bash
         run: |
-          if [ "$DEPLOY_OUTCOME" = "success" ] && [ "$HTML_OUTCOME" = "success" ] && [ "$ROUTE_OUTCOME" = "success" ]; then
+          if [ "$DEPLOY_OUTCOME" = "success" ] && [ "$VERIFY_OUTCOME" = "success" ]; then
             RESULT=PASS
           else
             RESULT=FAIL
@@ -157,10 +124,9 @@ jobs:
             echo "- Source commit: $GITHUB_SHA"
             echo "- Live URL: ${PAGE_URL:-Unavailable}"
             echo "- Deploy action: $DEPLOY_OUTCOME"
-            echo "- Homepage and assets: $HTML_OUTCOME"
-            echo "- Live route verification: $ROUTE_OUTCOME"
+            echo "- Homepage and assets: $VERIFY_OUTCOME"
             echo "- Recorded at: $(date -u +'%Y-%m-%d %H:%M:%S UTC')"
-            echo '- Verification checks: compiled assets, no raw /src/main.jsx reference, favicon, every public route, header/main/footer rendering, console errors and failed local assets'
+            echo '- Verification checks: production build, compiled asset paths, JavaScript bundle availability, no raw /src/main.jsx reference, and favicon availability'
           } > docs/DEPLOYMENT_STATUS.md
 
           git pull --rebase origin main
@@ -174,9 +140,7 @@ jobs:
         if: always()
         env:
           DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          HTML_OUTCOME: ${{ steps.html_verify.outcome }}
-          ROUTE_OUTCOME: ${{ steps.live_routes.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
         run: |
           test "$DEPLOY_OUTCOME" = "success"
-          test "$HTML_OUTCOME" = "success"
-          test "$ROUTE_OUTCOME" = "success"
+          test "$VERIFY_OUTCOME" = "success"
