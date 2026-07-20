@@ -1,0 +1,1 @@
+import{t as e}from"./index-D9NfQnqS.js";var t=e();function n({eyebrow:e,title:n,text:r,align:i=`left`,inverse:a=!1}){return(0,t.jsxs)(`div`,{className:`section-heading section-heading--${i} ${a?`section-heading--inverse`:``}`,children:[e&&(0,t.jsx)(`span`,{className:`eyebrow`,children:e}),(0,t.jsx)(`h2`,{children:n}),r&&(0,t.jsx)(`p`,{children:r})]})}export{n as t};

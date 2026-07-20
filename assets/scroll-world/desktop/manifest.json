@@ -1,0 +1,38 @@
+[
+  {
+    "file": "01-origin-desktop.webp",
+    "dimensions": "1920x1080",
+    "size_kb": 241.2,
+    "source": "misty_coffee_plantation_at_sunrise.png"
+  },
+  {
+    "file": "02-harvest-desktop.webp",
+    "dimensions": "1920x1080",
+    "size_kb": 267.6,
+    "source": "a_cinematic_golden_hour_landscape_scene_in_sharp.png"
+  },
+  {
+    "file": "03-processing-desktop.webp",
+    "dimensions": "1920x1080",
+    "size_kb": 177.6,
+    "source": "coffee_drying_station_at_golden_hour.png"
+  },
+  {
+    "file": "04-quality-desktop.webp",
+    "dimensions": "1920x1080",
+    "size_kb": 92.3,
+    "source": "focused_coffee_tasting_in_warm_light.png"
+  },
+  {
+    "file": "05-export-desktop.webp",
+    "dimensions": "1920x1080",
+    "size_kb": 193.8,
+    "source": "organized_warehouse_with_workers_and_sacks.png"
+  },
+  {
+    "file": "06-buyers-desktop.webp",
+    "dimensions": "1920x1080",
+    "size_kb": 100.6,
+    "source": "coffee_tasting_session_in_the_roastery.png"
+  }
+]
