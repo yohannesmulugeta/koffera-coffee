@@ -109,7 +109,8 @@ export default function ScrollWorldExperience() {
     if (!root) return;
 
     const scrollableDistance = Math.max(root.offsetHeight - window.innerHeight, 1);
-    const destination = root.offsetTop + (index / Math.max(sceneCount - 1, 1)) * scrollableDistance;
+    const rootTop = window.scrollY + root.getBoundingClientRect().top;
+    const destination = rootTop + (index / Math.max(sceneCount - 1, 1)) * scrollableDistance;
 
     window.scrollTo({
       top: destination,
@@ -156,8 +157,8 @@ export default function ScrollWorldExperience() {
                   className={`koffera-scroll-world__copy ${isActive ? 'is-active' : ''}`}
                   style={{
                     '--scene-accent': scene.accent,
+                    '--copy-offset': `${offset}px`,
                     opacity,
-                    transform: `translate3d(0, ${offset}px, 0)`,
                     pointerEvents: isActive ? 'auto' : 'none',
                   }}
                   aria-hidden={!isActive}
