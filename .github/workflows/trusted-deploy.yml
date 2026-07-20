@@ -20,8 +20,7 @@ jobs:
   build:
     if: >-
       startsWith(github.event.pull_request.title, '[deploy]') &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.user.login == github.repository_owner
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Checkout trusted main
@@ -104,8 +103,7 @@ jobs:
     if: >-
       always() &&
       startsWith(github.event.pull_request.title, '[deploy]') &&
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      github.event.pull_request.user.login == github.repository_owner
+      github.event.pull_request.head.repo.full_name == github.repository
     needs: [build, deploy]
     runs-on: ubuntu-latest
     steps:
